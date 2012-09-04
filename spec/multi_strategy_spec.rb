@@ -22,3 +22,11 @@ describe "AliasMethodChain" do
   include_context "weebles"
   it_behaves_like "a method tracer"
 end
+
+
+
+describe "MethodBondage" do
+  subject { SLG::Meta::MethodBondage }
+  include_context "weebles"
+  it_behaves_like "a method tracer"
+end
