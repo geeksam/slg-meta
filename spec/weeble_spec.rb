@@ -14,4 +14,16 @@ describe Weeble do
     Weeble.wobbles = 0
     expect(Weeble.wobbles).to eq(0)
   end
+
+  # NB: these tests are finicky.
+  # If they start failing intermittently, it's probably because
+  # multiple things are poking around in the Weeble class.
+  # It's probably worth the effort to create a new class for each example group.
+  it "takes an argument to the class method" do
+    expect { Weeble.wobble { raise 'heck' } }.to raise_error
+  end
+
+  it "takes an argument to the instance method" do
+    expect { Weeble.new.wobble { raise 'kceh' } }.to raise_error
+  end
 end

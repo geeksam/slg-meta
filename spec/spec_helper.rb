@@ -4,3 +4,4 @@ lib_path  = Pathname.new(File.expand_path(spec_path + '../lib'))
 $: << lib_path.to_s
 require 'slg-meta'
 require spec_path + 'weeble'
+require spec_path + 'shared_stuff'
