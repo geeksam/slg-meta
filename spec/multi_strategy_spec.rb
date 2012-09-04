@@ -14,3 +14,11 @@ describe "SetTraceFunc" do
     expect(traced_instance_method.call_count).to eq(10)
   end
 end
+
+
+
+describe "AliasMethodChain" do
+  subject { SLG::Meta::AliasMethodChain }
+  include_context "weebles"
+  it_behaves_like "a method tracer"
+end
