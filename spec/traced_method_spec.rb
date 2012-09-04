@@ -55,6 +55,15 @@ describe SLG::Meta::TracedMethod do
       expect(subject.call_count).to eq(4)
     end
 
-    it "is threadsafe"
+    it "is threadsafe" do
+      threads = []
+      10.times do
+        threads << Thread.new do
+          subject.called! { sleep 0.01 }
+        end
+      end
+      threads.each { |th| th.join }
+      expect(subject.call_count).to eq(10)
+    end
   end
 end

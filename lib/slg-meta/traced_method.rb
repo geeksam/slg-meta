@@ -1,3 +1,5 @@
+require 'thread'
+
 module SLG
   module Meta
     class TracedMethod
@@ -25,9 +27,19 @@ module SLG
         base.to_s
       end
 
-      # TODO: consider mutexing this for thread safety
       def called!
-        @call_count += 1
+        mutex.synchronize do
+          # Using the verbose version to facilitate testing
+          n = @call_count
+          yield if block_given?
+          @call_count = n + 1
+        end
+      end
+
+      private
+
+      def mutex
+        @mutex ||= Mutex.new
       end
     end
   end
