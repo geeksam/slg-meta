@@ -1,10 +1,5 @@
 require 'spec_helper'
 
-class Weeble
-  def wobble
-  end
-end
-
 describe "using set_trace_func" do
   subject { SLG::Meta::SetTraceFunc }
   let(:traced_method) {
