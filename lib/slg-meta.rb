@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), *%w[requires])
 module SLG
   module Meta
     def self.default_tracer
-      @default_tracer ||= SetTraceFunc
+      @default_tracer ||= MethodBondage
     end
 
     def self.default_tracer=(tracer)
