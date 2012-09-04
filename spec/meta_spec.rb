@@ -1,5 +1,8 @@
 require 'spec_helper'
 
+Weeble1 = new_weeble_class
+Weeble2 = new_weeble_class
+
 describe SLG::Meta do
   subject { SLG:: Meta }
 
@@ -17,12 +20,19 @@ describe SLG::Meta do
     expect(tm.data).to eq([Weeble, :singleton, :wobble])
   end
 
-  it "traces calls to a method *and actually calls that method*", :integration => true do
-    tm = SLG::Meta.trace!('Weeble.wobble', SLG::Meta::SetTraceFunc)
-    5.times do
-      Weeble.wobble
-    end
+  it "traces calls to a method using the SetTraceFunc strategy", :integration => true do
+    tm = SLG::Meta.trace!('Weeble1.wobble', SLG::Meta::SetTraceFunc)
+    5.times { Weeble1.wobble }
     expect(tm.call_count).to eq(5)
-    expect(Weeble.wobbles).to eq(5)
+    expect(Weeble1.wobbles).to eq(5)
   end
+
+  it "traces calls to a method using the AliasMethodChain strategy", :integration => true do
+    tm = SLG::Meta.trace!('Weeble2.wobble', SLG::Meta::AliasMethodChain)
+    5.times { Weeble2.wobble }
+    expect(tm.call_count).to eq(5)
+    expect(Weeble2.wobbles).to eq(5)
+  end
+
+  # TODO: stop using the shared Weeble class for this
 end

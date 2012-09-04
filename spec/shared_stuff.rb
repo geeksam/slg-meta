@@ -1,17 +1,43 @@
 shared_context "weebles" do
-  let(:traced_instance_method)  { SLG::Meta::TracedMethod.for('Weeble#wobble') }
-  let(:traced_singleton_method) { SLG::Meta::TracedMethod.for('Weeble.wobble') }
-  let(:weeble) { Weeble.new }
+  let(:traced_instance_method)  { SLG::Meta::TracedMethod.new(weeble_class, :instance,  :wobble) }
+  let(:traced_singleton_method) { SLG::Meta::TracedMethod.new(weeble_class, :singleton, :wobble) }
+  let(:weeble_class) { new_weeble_class }
+  let(:weeble) { weeble_class.new }
+end
 
-  after(:each) do
-    Weeble.wobbles = 0
+
+shared_examples "a weeble class" do
+  before(:each) do
+    weeble_class.wobbles = 0
+  end
+
+  it "has a count of wobbles" do
+    expect(weeble_class.wobbles).to eq(0)
+    weeble_class.wobble
+    expect(weeble_class.wobbles).to eq(1)
+    weeble_class.wobble
+    expect(weeble_class.wobbles).to eq(2)
+    weeble_class.wobbles = 0
+    expect(weeble_class.wobbles).to eq(0)
+  end
+
+  # NB: these tests are finicky.
+  # If they start failing intermittently, it's probably because
+  # multiple things are poking around in the Weeble class.
+  # Leave that class for an integration spec that needs a proper class name.
+  it "takes an argument to the class method" do
+    expect { weeble_class.wobble { raise 'heck' } }.to raise_error
+  end
+
+  it "takes an argument to the instance method" do
+    expect { weeble_class.new.wobble { raise 'kceh' } }.to raise_error
   end
 end
 
 
 shared_examples "a method tracer" do
   describe "instance method tracing" do
-    let(:wobbler) { Weeble.new }
+    let(:wobbler) { weeble_class.new }
 
     it "counts calls to the method, handling block arguments with aplomb" do
       subject.trace!(traced_instance_method)
@@ -25,7 +51,7 @@ shared_examples "a method tracer" do
   end
 
   describe "singleton method tracing" do
-    let(:wobbler) { Weeble }
+    let(:wobbler) { weeble_class }
 
     it "traces calls to a singleton method" do
       subject.trace!(traced_singleton_method)
