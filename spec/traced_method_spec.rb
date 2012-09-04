@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+# Stub out things referred to in the tests
 module Base64
 end
 module ActiveRecord
@@ -9,36 +10,34 @@ end
 
 describe SLG::Meta::TracedMethod do
   def trace(method_identifier)
-    SLG::Meta::TracedMethod.for_method(method_identifier)
+    SLG::Meta::TracedMethod.for(method_identifier)
   end
-  def trace_data(method_identifier)
-    trace(method_identifier).to_a
-  end
+
   subject { trace('String#size') }
 
   describe "parsing method identifiers" do
     it "groks String#size" do
-      expect(trace_data 'String#size').to \
+      expect(trace('String#size').data).to \
         eq([String, :instance, :size])
     end
 
     it "groks Array#map!" do
-      expect(trace_data 'Array#map!').to \
+      expect(trace('Array#map!').data).to \
         eq([Array, :instance, :map!])
     end
 
     it "groks ActiveRecord::Base#find" do
-      expect(trace_data 'ActiveRecord::Base#find').to \
+      expect(trace('ActiveRecord::Base#find').data).to \
         eq([ActiveRecord::Base, :instance, :find])
     end
 
     it "groks Base64.encode64" do
-      expect(trace_data 'Base64.encode64').to \
+      expect(trace('Base64.encode64').data).to \
         eq([Base64, :singleton, :encode64])
     end
 
     it "eats whitespace" do
-      expect(trace_data '  Base64  . encode64 ').to \
+      expect(trace('  Base64  . encode64 ').data).to \
         eq([Base64, :singleton, :encode64])
     end
   end
@@ -52,6 +51,8 @@ describe SLG::Meta::TracedMethod do
     it "increments #call_count" do
       3.times { subject.called! }
       expect(subject.call_count).to eq(3)
+      subject.called!
+      expect(subject.call_count).to eq(4)
     end
 
     it "is threadsafe"

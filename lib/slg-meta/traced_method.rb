@@ -3,7 +3,7 @@ module SLG
     class TracedMethod
       attr_reader :base, :method, :type, :call_count
 
-      def self.for_method(method_id_string)
+      def self.for(method_id_string)
         method_id_string =~ /(.*)([#\.])(.*)/
         base, type, method = $1.strip, $2, $3.strip
         base   = Kernel.const_lookup(base)
@@ -17,7 +17,7 @@ module SLG
         @call_count = 0
       end
 
-      def to_a
+      def data
         [base, type, method]
       end
 
