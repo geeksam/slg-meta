@@ -2,11 +2,8 @@ module SLG
   module Meta
     module MethodBondage
       def self.trace!(traced_method)
-        if traced_method.type == :instance
-          target = traced_method.target
-        else
-          target = traced_method.target.metaclass
-        end
+        target = traced_method.target
+        target = target.metaclass if traced_method.type == :singleton
         jiggery_pokery = method_jiggery_pokery(target, traced_method)
         target.module_eval(&jiggery_pokery)
       end
