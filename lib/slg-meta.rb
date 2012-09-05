@@ -21,3 +21,7 @@ module SLG
     end
   end
 end
+
+
+# Now that that's all over with, add some support for command-line invocation
+require File.join(File.dirname(__FILE__), *%w[command_line_support])
