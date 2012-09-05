@@ -19,7 +19,7 @@ module SLG
         @call_count = 0
       end
 
-      def woss_name
+      def base_name
         base.to_s
       end
 

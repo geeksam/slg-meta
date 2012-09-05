@@ -42,9 +42,9 @@ describe SLG::Meta::TracedMethod do
     end
   end
 
-  it "has a #woss_name method (which should be #class_name, but rspec sends that on a failure and barfs all over itself)" do
+  it "has a #base_name method (which should be #class_name, but rspec sends that on a failure and barfs all over itself)" do
     tm = trace('ActiveRecord::Base#find')
-    expect(tm.woss_name).to eq('ActiveRecord::Base')
+    expect(tm.base_name).to eq('ActiveRecord::Base')
   end
 
   describe "#called!" do
