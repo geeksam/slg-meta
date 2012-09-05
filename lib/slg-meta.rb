@@ -2,22 +2,22 @@ require File.join(File.dirname(__FILE__), *%w[requires])
 
 module SLG
   module Meta
-    def self.default_tracer
-      @default_tracer ||= MethodBondage
-    end
-
-    def self.default_tracer=(tracer)
-      @default_tracer = tracer
-    end
-
     def self.traced_method(method_identifier)
       TracedMethod.for(method_identifier)
     end
 
-    def self.trace!(method_identifier, tracer = default_tracer)
-      tm = traced_method(method_identifier)
-      tracer.trace!(tm)
-      tm
+    def self.default_strategy
+      Tracer.default_strategy
+    end
+
+    def self.default_strategy=(strategy)
+      Tracer.default_strategy
+    end
+
+    def self.trace!(method_identifier, strategy = default_strategy)
+      traced_method(method_identifier).tap do |tm|
+        Tracer.trace!(tm)
+      end
     end
   end
 end

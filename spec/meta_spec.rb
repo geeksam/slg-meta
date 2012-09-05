@@ -17,7 +17,7 @@ describe SLG::Meta do
   end
 
   it "has a default implementation" do
-    expect(subject.default_tracer).to be(SLG::Meta::MethodBondage)
+    expect(subject.default_strategy).to be(SLG::Meta::MethodBondage)
   end
 
   it "sets up a traced method" do
