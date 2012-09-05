@@ -19,10 +19,6 @@ module SLG
         @call_count = 0
       end
 
-      def data
-        [base, type, method]
-      end
-
       def woss_name
         base.to_s
       end

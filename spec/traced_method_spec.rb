@@ -16,29 +16,29 @@ describe SLG::Meta::TracedMethod do
   subject { trace('String#size') }
 
   describe "parsing method identifiers" do
+    def data(method_identifier)
+      tm = trace(method_identifier)
+      [tm.base, tm.type, tm.method]
+    end
+
     it "groks String#size" do
-      expect(trace('String#size').data).to \
-        eq([String, :instance, :size])
+      expect(data('String#size')).to eq([String, :instance, :size])
     end
 
     it "groks Array#map!" do
-      expect(trace('Array#map!').data).to \
-        eq([Array, :instance, :map!])
+      expect(data('Array#map!')).to eq([Array, :instance, :map!])
     end
 
     it "groks ActiveRecord::Base#find" do
-      expect(trace('ActiveRecord::Base#find').data).to \
-        eq([ActiveRecord::Base, :instance, :find])
+      expect(data('ActiveRecord::Base#find')).to eq([ActiveRecord::Base, :instance, :find])
     end
 
     it "groks Base64.encode64" do
-      expect(trace('Base64.encode64').data).to \
-        eq([Base64, :singleton, :encode64])
+      expect(data('Base64.encode64')).to eq([Base64, :singleton, :encode64])
     end
 
     it "eats whitespace" do
-      expect(trace('  Base64  . encode64 ').data).to \
-        eq([Base64, :singleton, :encode64])
+      expect(data('  Base64  . encode64 ')).to eq([Base64, :singleton, :encode64])
     end
   end
 

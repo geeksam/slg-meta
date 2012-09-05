@@ -23,7 +23,7 @@ describe SLG::Meta do
   it "sets up a traced method" do
     tm = subject.traced_method('Weeble.wobble')
     expect(tm).to be_kind_of(SLG::Meta::TracedMethod)
-    expect(tm.data).to eq([Weeble, :singleton, :wobble])
+    expect(tm.to_s).to eq('Weeble.wobble')
   end
 
   # Integration specs for the various strategies
