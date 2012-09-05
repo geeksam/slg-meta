@@ -9,7 +9,8 @@ module SLG
         @default_strategy = strategy
       end
 
-      def self.trace!(traced_method, strategy = default_strategy)
+      def self.trace!(traced_method, strategy = nil)
+        strategy ||= default_strategy
         strategy.trace!(traced_method)
       end
     end

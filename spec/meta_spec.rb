@@ -16,16 +16,6 @@ describe SLG::Meta do
     Weeble.wobbles = 0
   end
 
-  it "has a default implementation" do
-    expect(subject.default_strategy).to be(SLG::Meta::MethodBondage)
-  end
-
-  it "sets up a traced method" do
-    tm = subject.traced_method('Weeble.wobble')
-    expect(tm).to be_kind_of(SLG::Meta::TracedMethod)
-    expect(tm.to_s).to eq('Weeble.wobble')
-  end
-
   # Integration specs for the various strategies
 
   Weeble1 = new_weeble_class
