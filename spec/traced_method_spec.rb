@@ -66,4 +66,26 @@ describe SLG::Meta::TracedMethod do
       expect(subject.call_count).to eq(10)
     end
   end
+
+  describe "#to_s" do
+    it "round-trips String#size" do
+      expect(trace('String#size').to_s).to eq('String#size')
+    end
+
+    it "round-trips Array#map!" do
+      expect(trace('Array#map!').to_s).to eq('Array#map!')
+    end
+
+    it "round-trips ActiveRecord::Base#find" do
+      expect(trace('ActiveRecord::Base#find').to_s).to eq('ActiveRecord::Base#find')
+    end
+
+    it "round-trips Base64.encode64" do
+      expect(trace('Base64.encode64').to_s).to eq('Base64.encode64')
+    end
+
+    it "corrects whitespace issues in input" do
+      expect(trace('  Base64  . encode64 ').to_s).to eq('Base64.encode64')
+    end
+  end
 end

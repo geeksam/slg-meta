@@ -36,6 +36,11 @@ module SLG
         end
       end
 
+      def to_s
+        separator = type == :instance ? '#' : '.'
+        [base, separator, method].join
+      end
+
       private
 
       def mutex
