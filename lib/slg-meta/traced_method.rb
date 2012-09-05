@@ -5,6 +5,9 @@ module SLG
     class TracedMethod
       attr_reader :target_name, :method, :type, :call_count
 
+      class TargetNotDefined < RuntimeError
+      end
+
       def self.for(method_id_string)
         md = /(.*)([#\.])(.*)/.match(method_id_string)
         target_name = md.captures[0].gsub(/\s+/, '')
@@ -23,6 +26,8 @@ module SLG
 
       def target
         @target ||= Kernel.const_lookup(target_name)
+      rescue NameError
+        raise TargetNotDefined, "Constant '#{target_name}' not defined."
       end
 
       def called!

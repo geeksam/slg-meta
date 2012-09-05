@@ -5,6 +5,9 @@ module SLG
     def self.trace!(method_identifier, strategy = nil)
       traced_method = TracedMethod.for(method_identifier)
       Tracer.trace!(traced_method, strategy)
+    rescue TracedMethod::TargetNotDefined
+      # NOP
+    ensure
       return traced_method
     end
   end
