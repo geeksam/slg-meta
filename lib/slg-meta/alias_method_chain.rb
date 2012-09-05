@@ -3,7 +3,7 @@ module SLG
     module AliasMethodChain
       def self.trace!(traced_method)
         alias_and_trace = alias_and_trace_proc(traced_method)
-        target = traced_method.base
+        target = traced_method.target
         if traced_method.type == :instance
           target.module_eval(&alias_and_trace)
         else

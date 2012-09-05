@@ -3,9 +3,9 @@ module SLG
     module MethodBondage
       def self.trace!(traced_method)
         if traced_method.type == :instance
-          target = traced_method.base
+          target = traced_method.target
         else
-          target = traced_method.base.metaclass
+          target = traced_method.target.metaclass
         end
         jiggery_pokery = method_jiggery_pokery(target, traced_method)
         target.module_eval(&jiggery_pokery)

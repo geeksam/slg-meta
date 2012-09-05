@@ -18,7 +18,7 @@ describe SLG::Meta::TracedMethod do
   describe "parsing method identifiers" do
     def data(method_identifier)
       tm = trace(method_identifier)
-      [tm.base, tm.type, tm.method]
+      [tm.target, tm.type, tm.method]
     end
 
     it "groks String#size" do
@@ -42,9 +42,9 @@ describe SLG::Meta::TracedMethod do
     end
   end
 
-  it "has a #base_name method (which should be #class_name, but rspec sends that on a failure and barfs all over itself)" do
+  it "has a #target_name method" do
     tm = trace('ActiveRecord::Base#find')
-    expect(tm.base_name).to eq('ActiveRecord::Base')
+    expect(tm.target_name).to eq('ActiveRecord::Base')
   end
 
   describe "#called!" do
