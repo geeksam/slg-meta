@@ -12,10 +12,6 @@ end
 describe SLG::Meta do
   subject { SLG:: Meta }
 
-  after(:each) do
-    Weeble.wobbles = 0
-  end
-
   # Integration specs for the various strategies
 
   Weeble1 = new_weeble_class
