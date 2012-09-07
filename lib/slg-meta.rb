@@ -20,6 +20,7 @@ module SLG
       return traced_method
     end
 
+    # TODO: keep track of current strategy, so more than one is not active at the same time?
     def self.stop_tracing!(strategy_name = DefaultStrategyName)
       strategy = Strategies[strategy_name]
       strategy.stop_tracing!
