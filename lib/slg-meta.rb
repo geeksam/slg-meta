@@ -13,7 +13,7 @@ module SLG
     def self.trace!(method_identifier, strategy_name = nil)
       traced_method = TracedMethod.for(method_identifier)
       strategy = Strategies[strategy_name]
-      Tracer.trace!(traced_method, strategy)
+      strategy.trace!(traced_method)
     rescue TracedMethod::TargetNotDefined
       # TODO: set up callback to add tracing once it is defined
     ensure
@@ -22,7 +22,7 @@ module SLG
 
     def self.stop_tracing!(strategy_name = DefaultStrategyName)
       strategy = Strategies[strategy_name]
-      Tracer.stop_tracing!(strategy)
+      strategy.stop_tracing!
     end
 
     def self.with_tracing(method_identifier, strategy_name = DefaultStrategyName)
