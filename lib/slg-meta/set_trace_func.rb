@@ -13,7 +13,7 @@ module SLG
         }
       end
 
-      def self.stop_tracing!
+      def self.stop_tracing!(traced_method)
         Kernel.set_trace_func(nil)
       end
     end

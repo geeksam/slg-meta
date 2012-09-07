@@ -2,19 +2,23 @@ module SLG
   module Meta
     module AliasMethodChain
       def self.trace!(traced_method)
-        m, old_m = names_for_aliasing(traced_method)
+        m, m_plus = names_for_aliasing(traced_method)
         eval_against_appropriate_target(traced_method) do
-          alias_method old_m, m
+          alias_method m_plus, m
           # NB: this behavior is finicky; see weeble_spec.rb
           define_method(m) do |*args, &b|
             traced_method.called!
-            send old_m, *args, &b
+            send m_plus, *args, &b
           end
         end
       end
 
-      def self.stop_tracing!
-        puts "TODO: #{self}.stop_tracing!"
+      def self.stop_tracing!(traced_method)
+        m, m_plus = names_for_aliasing(traced_method)
+        eval_against_appropriate_target(traced_method) do
+          alias_method m, m_plus
+          undef_method m_plus
+        end
       end
 
       private

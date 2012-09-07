@@ -11,8 +11,8 @@ module SLG
     Strategies.default = MethodBondage
 
     def self.trace!(method_identifier, strategy_name = nil)
-      traced_method = TracedMethod.for(method_identifier)
       strategy = Strategies[strategy_name]
+      traced_method = TracedMethod.for(method_identifier)
       strategy.trace!(traced_method)
     rescue TracedMethod::TargetNotDefined
       # TODO: set up callback to add tracing once it is defined
@@ -21,15 +21,18 @@ module SLG
     end
 
     # TODO: keep track of current strategy, so more than one is not active at the same time?
-    def self.stop_tracing!(strategy_name = DefaultStrategyName)
+    def self.stop_tracing!(method_identifier, strategy_name = nil)
       strategy = Strategies[strategy_name]
-      strategy.stop_tracing!
+      traced_method = TracedMethod.for(method_identifier)
+      strategy.stop_tracing!(traced_method)
+    ensure
+      return traced_method
     end
 
-    def self.with_tracing(method_identifier, strategy_name = DefaultStrategyName)
+    def self.with_tracing(method_identifier, strategy_name = nil)
       traced_method = trace!(method_identifier, strategy_name)
       yield
-      stop_tracing!(strategy_name)
+      stop_tracing!(method_identifier, strategy_name)
     ensure
       return traced_method
     end
