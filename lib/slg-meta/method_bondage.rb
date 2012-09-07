@@ -17,10 +17,7 @@ module SLG
         m, ivar = method_and_ivar_names(traced_method)
         eval_against_appropriate_target(traced_method) do
           unbound_method = instance_variable_get(ivar)
-          # Never did find a good way to rebind one of these...
-          define_method(m) do |*args, &b|
-            unbound_method.bind(self).call(*args, &b)
-          end
+          define_method(m, unbound_method)
         end
       end
 
