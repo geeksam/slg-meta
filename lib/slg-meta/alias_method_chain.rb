@@ -34,7 +34,7 @@ module SLG
 
       def self.names_for_aliasing(traced_method)
         m = traced_method.method
-        m_plus = :"#{m}_without_trace"
+        m_plus = :"__slg_meta__#{m}__without_trace__"
         return m, m_plus
       end
     end
