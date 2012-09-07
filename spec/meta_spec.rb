@@ -5,8 +5,9 @@ shared_examples "a method tracing strategy" do |weeble_class, strategy|
     traced_method = SLG::Meta.with_tracing("#{weeble_class}.wobble", strategy) do
       5.times { weeble_class.wobble }
     end
+    weeble_class.wobble # this should not be traced!
     expect(traced_method.call_count).to eq(5)
-    expect(weeble_class.wobbles).to eq(5)
+    expect(weeble_class.wobbles).to eq(6)
   end
 end
 
