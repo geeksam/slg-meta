@@ -2,10 +2,10 @@ module SLG
   module Meta
     module MethodBondage
       def self.trace!(traced_method)
-        target = target_for_eval(traced_method)
-        unbound_method = target.instance_method(traced_method.method)
-        m = traced_method.method
-        target.module_eval do
+        m, ivar = method_and_ivar_names(traced_method)
+        eval_against_appropriate_target(traced_method) do
+          unbound_method = instance_method(m)
+          instance_variable_set(ivar, unbound_method)
           define_method(m) do |*args, &b|
             traced_method.called!
             unbound_method.bind(self).call(*args, &b)
@@ -14,15 +14,28 @@ module SLG
       end
 
       def self.stop_tracing!(traced_method)
-        puts "TODO: #{self}.stop_tracing!"
+        m, ivar = method_and_ivar_names(traced_method)
+        eval_against_appropriate_target(traced_method) do
+          unbound_method = instance_variable_get(ivar)
+          # Never did find a good way to rebind one of these...
+          define_method(m) do |*args, &b|
+            unbound_method.bind(self).call(*args, &b)
+          end
+        end
       end
 
       private
 
-      def self.target_for_eval(traced_method)
+      def self.eval_against_appropriate_target(traced_method, &proc)
         target = traced_method.target
         target = target.metaclass if traced_method.type == :singleton
-        target
+        target.module_eval(&proc)
+      end
+
+      def self.method_and_ivar_names(traced_method)
+        m = traced_method.method
+        ivar = "@__slg_meta__#{m}__unbound_method__"
+        return m, ivar
       end
     end
   end
