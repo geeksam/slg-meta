@@ -15,7 +15,7 @@ Benchmark.bmbm do |x|
   foo = x.report("no tracing") do
     n.times { McTesterson.testy }
   end
-  strategies = [:set_trace_func]  # TODO: implement stop_tracing! for strategies before adding them here
+  strategies = [:set_trace_func, :alias_method_chain, :method_bondage]
   strategies.each do |strategy|
     x.report("#{strategy}, calling a traced method") do
       SLG::Meta.with_tracing('McTesterson.testy', strategy) do

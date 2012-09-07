@@ -22,3 +22,12 @@ desc "find TODO items"
 task :todo do
   puts `ack -h --ruby '#\s*TODO.*'`
 end
+
+desc "run benchmarks"
+task :performance do
+  IO.popen('ruby etc/performance.rb') do |data|
+    while line = data.gets
+      puts line
+    end
+  end
+end
