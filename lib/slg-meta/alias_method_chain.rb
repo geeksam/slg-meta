@@ -11,6 +11,10 @@ module SLG
         end
       end
 
+      def self.stop_tracing!
+        puts "TODO: #{self}.stop_tracing!"
+      end
+
       private
 
       def self.alias_and_trace_proc(traced_method)

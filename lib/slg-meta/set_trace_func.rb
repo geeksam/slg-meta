@@ -12,6 +12,10 @@ module SLG
           traced_method.called!
         }
       end
+
+      def self.stop_tracing!
+        Kernel.set_trace_func(nil)
+      end
     end
   end
 end

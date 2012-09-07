@@ -8,6 +8,10 @@ module SLG
         target.module_eval(&jiggery_pokery)
       end
 
+      def self.stop_tracing!
+        puts "TODO: #{self}.stop_tracing!"
+      end
+
       private
 
       def self.method_jiggery_pokery(target, traced_method)
