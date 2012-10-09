@@ -12,7 +12,25 @@ shared_examples "a method tracing strategy" do |weeble_class, strategy|
 end
 
 describe SLG::Meta do
-  subject { SLG:: Meta }
+  subject(:meta) { SLG::Meta }
+
+  describe "callback registration for tracing methods not yet defined" do
+    it "keeps track of it for later" do
+      meta.trace!('Foo#foo')
+      expect(meta.traced_methods.map(&:to_s)).to include('Foo#foo')
+    end
+
+    it "actually adds tracing later, when the method is defined" do
+      traced_method = meta.trace!('YakShaversRUs#shave_that_yak!')
+      class YakShaversRUs
+        def shave_that_yak!
+        end
+      end
+      yak = YakShaversRUs.new
+      3.times { yak.shave_that_yak! }
+      expect(traced_method.call_count).to eq(3)
+    end
+  end
 
   # Integration specs for the various strategies
 

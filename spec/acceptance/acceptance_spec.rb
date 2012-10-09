@@ -11,7 +11,6 @@ describe "acceptance criteria" do
   end
 
   it "passes the more complex example" do
-    pending "callbacks"
     output = ruby_output('B#foo', 'module A; def foo; end; end; class B; include A; end; 10.times{B.new.foo}')
     output.strip.should == 'B#foo called 10 times'
   end
